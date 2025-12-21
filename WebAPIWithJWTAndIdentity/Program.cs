@@ -14,16 +14,11 @@ using WebAPIWithJWTAndIdentity.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =====================
-// Database
-// =====================
+
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connection));
 
-// =====================
-// Identity
-// =====================
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(config =>
 {
     config.Password.RequiredLength = 4;
@@ -35,9 +30,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(config =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// =====================
-// JWT Authentication
-// =====================
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,18 +50,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// =====================
-// DI / Services
-// =====================
-// Тут можешь вставить свои сервисы
+
+
 builder.Services.AddScoped<Seeder>();
-builder.Services.AddScoped<ITodoItemService,TodoItemService>(); // <-- сюда свои сервисы добавишь
-builder.Services.AddScoped<IAccountService,AccountService>(); // <-- сюда свои сервисы добавишь
+builder.Services.AddScoped<ITodoItemService,TodoItemService>(); 
+builder.Services.AddScoped<IAccountService,AccountService>(); 
 builder.Services.AddAutoMapper(typeof(MapperProfile)); 
 
-// =====================
-// Swagger
-// =====================
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -105,17 +93,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// =====================
-// Controllers
-// =====================
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
-// =====================
-// Auto migrate DB + seed roles/users
-// =====================
-try
-{
+
+//Making true structure by  Abubakr
+
     using var scope = app.Services.CreateScope();
     var serviceProvider = scope.ServiceProvider;
 
@@ -125,15 +109,12 @@ try
     var seeder = serviceProvider.GetRequiredService<Seeder>();
     await seeder.SeedRole();
     await seeder.SeedUser();
-}
-catch (Exception ex)
-{
-    // Можно логировать, если нужно
-}
 
-// =====================
+
+
+
 app.UseMiddleware<CustomLoggingMiddleware>();
-// =====================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

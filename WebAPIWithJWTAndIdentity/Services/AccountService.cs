@@ -110,7 +110,7 @@ public class AccountService : IAccountService
             signingCredentials: credentials
         );
 
-       
+       //Making true structure by Abubakr
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
         return tokenString;
     }

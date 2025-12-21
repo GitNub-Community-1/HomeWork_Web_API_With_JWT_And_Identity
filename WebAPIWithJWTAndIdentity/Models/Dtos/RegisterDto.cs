@@ -11,5 +11,6 @@ public class RegisterDto
     [Compare("Password")]
     public string ConfirmPassword { get; set; }
     public string Email { get; set; }
+    //Making true structure by  Abubakr
     public string PhoneNumber { get; set; }
 }
