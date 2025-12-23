@@ -68,7 +68,22 @@ public class AccountController : ControllerBase
     {
         return await _accountService.AddOrRemoveUserFromRole(userRoleDto,true);
     }
-
+    
+    
+    [HttpPost("ForgotPassword")]
+    [AllowAnonymous]
+    public async Task<Response<string>> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
+    {
+        return await _accountService.ForgotPasswordTokenGenerator(forgotPasswordDto);
+    }
+    
+      
+    [HttpPost("ResetPassword")]
+    [AllowAnonymous]
+    public async Task<Response<string>> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+    {
+        return await _accountService.ResetPassword(resetPasswordDto);
+    }
 
 
 

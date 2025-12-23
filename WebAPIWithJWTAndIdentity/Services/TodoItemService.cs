@@ -38,7 +38,7 @@ public class TodoItemService(ApplicationDbContext context, IMapper mapper) : ITo
             return new Response<List<TodoItemDto>>
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Message = "Authors retrieved successfully!",
+                Message = "TodoItem retrieved successfully!",
                 Data = result
             };
         /*}*/
@@ -113,7 +113,7 @@ public class TodoItemService(ApplicationDbContext context, IMapper mapper) : ITo
                 return new Response<TodoItemDto>(HttpStatusCode.NotFound, "TodoItem not found");
             
             var result = mapper.Map<TodoItemDto>(todoItem);
-            return new Response<TodoItemDto>(HttpStatusCode.OK, "Author retrieved successfully!", result);
+            return new Response<TodoItemDto>(HttpStatusCode.OK, "TodoItem retrieved successfully!", result);
         
         /*catch (Exception ex)
         {

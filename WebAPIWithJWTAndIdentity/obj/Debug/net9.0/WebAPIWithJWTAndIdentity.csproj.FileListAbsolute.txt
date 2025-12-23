@@ -142,3 +142,7 @@ C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTA
 C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\obj\Debug\net9.0\WebAPIWithJWTAndIdentity.pdb
 C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\obj\Debug\net9.0\WebAPIWithJWTAndIdentity.genruntimeconfig.cache
 C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\obj\Debug\net9.0\ref\WebAPIWithJWTAndIdentity.dll
+C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
+C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\bin\Debug\net9.0\MailKit.dll
+C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\bin\Debug\net9.0\MimeKit.dll
+C:\Users\LLC LEADER\OneDrive\Рабочий стол\WebApiDotnet\WebAPIWithJWTAndIdentity\WebAPIWithJWTAndIdentity\obj\Debug\net9.0\WebAPIWithJWTAndIdentity.sourcelink.json

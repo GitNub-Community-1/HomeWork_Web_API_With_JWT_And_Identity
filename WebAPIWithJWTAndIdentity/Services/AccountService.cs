@@ -6,6 +6,7 @@ using Domain.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit.Text;
 using WebAPIWithJWTAndIdentity.Data;
 using WebAPIWithJWTAndIdentity.Response;
 
@@ -17,17 +18,21 @@ public class AccountService : IAccountService
     private readonly IConfiguration _configuration;
     private readonly ApplicationDbContext _context;
     private readonly RoleManager<IdentityRole> _roleManager;
-
+    private readonly IEmailService _emailService;
+    
     public AccountService(
         UserManager<IdentityUser> userManager, 
         IConfiguration configuration,
         ApplicationDbContext context,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager,
+        IEmailService emailService)
+    
     {
         _userManager = userManager;
         _configuration = configuration;
         _context = context;
         _roleManager = roleManager;
+        _emailService = emailService;
     }
     
     public async Task<Response<RegisterDto>> Register(RegisterDto model)
@@ -114,6 +119,45 @@ public class AccountService : IAccountService
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
         return tokenString;
     }
-    
+     public async Task<Response<string>> ChangePassword(ChangePasswordDto passwordDto, string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        var checkPassword = await _userManager.CheckPasswordAsync(user!, passwordDto.OldPassword);
+        if (checkPassword == false)
+        {
+            return new Response<string>(HttpStatusCode.BadRequest, "password is incorrect");
+        }
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user!);
+        var result = await _userManager.ResetPasswordAsync(user!, token, passwordDto.Password);
+        if (result.Succeeded == true)
+            return new Response<string>(HttpStatusCode.OK, "success");
+        else return new Response<string>(HttpStatusCode.BadRequest, "could not reset your password");
+    }
+
+    public async Task<Response<string>> ForgotPasswordTokenGenerator(ForgotPasswordDto forgotPasswordDto)
+    {
+        var existing = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
+        if (existing == null) return new Response<string>(HttpStatusCode.BadRequest, "not found");
+        var token = await _userManager.GeneratePasswordResetTokenAsync(existing);
+        var url =$"token={token} email={forgotPasswordDto.Email}";
+        _emailService.SendEmail(new MessageDto(new []{forgotPasswordDto.Email},"reset password",$"<h1>{url}    - copy this and past in your swagger for reseting your password)</h1>"),TextFormat.Html);
+
+        return new Response<string>(HttpStatusCode.OK, "reset password has been sent");
+    }
+
+    public async Task<Response<string>> ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
+        if (user == null)
+            return new Response<string>(HttpStatusCode.BadRequest, "user not found");
+
+        var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
+        if(resetPassResult.Succeeded)  
+            return new Response<string>(HttpStatusCode.OK, "success");
+        
+        return new Response<string>(HttpStatusCode.BadRequest, "please try again");
+
+    }
     
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using Domain.Dtos;
 using Infrastructure.Seed;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,6 +19,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connection));
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(config =>
 {
@@ -55,6 +61,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ITodoItemService,TodoItemService>(); 
 builder.Services.AddScoped<IAccountService,AccountService>(); 
+builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddAutoMapper(typeof(MapperProfile)); 
 
 
